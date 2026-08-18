@@ -25,7 +25,7 @@ func NewMySQL() (*sqlx.DB, error) {
 
 	// 赋值给全局变量
 	global.DB = db
-	fmt.Println("✅ Mysql 数据库连接成功！")
+	fmt.Println("✅ Mysql 数据库连接成功")
 
 	return db, nil
 }

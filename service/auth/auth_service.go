@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"golang.org/x/crypto/bcrypt"
+	"user_service/httpclient"
 	"user_service/model"
 	"user_service/pkg"
 	"user_service/repo"
@@ -12,30 +13,38 @@ import (
 
 // Register 用户注册
 func Register(ctx context.Context, req *model.RegisterRequest) error {
-
 	// 查询用户名是否存在
 	exist, err := repo.ExistsByUsername(ctx, req.Username)
 	if err != nil {
 		return err
 	}
-
 	if exist {
 		return errors.New("用户名已存在")
 	}
-
+	// 查询邮箱是否已经注册
+	emailExist, err := repo.ExistsByEmail(ctx, req.Email)
+	if err != nil {
+		return err
+	}
+	if emailExist {
+		return errors.New("邮箱已注册")
+	}
+	// 调用email-service验证邮箱函数
+	if err := httpclient.VerifyRegisterEmailCode(ctx, req.Email, req.Code); err != nil {
+		return err
+	}
 	// 加密密码
 	hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return errors.New("密码加密失败")
 	}
-
-	// 创建用户
+	// 构建用户对象
 	user := &model.User{
 		Username: req.Username,
 		Password: string(hash),
+		Email:    req.Email,
 	}
 
-	// 保存到数据库
 	return repo.Create(ctx, user)
 }
 

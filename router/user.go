@@ -9,6 +9,6 @@ import (
 func UserRoutes(r *gin.RouterGroup) {
 	userGroup := r.Group("/user")
 	{
-		userGroup.PUT("/password", auth.ChangePassword)
+		userGroup.PUT("/password", auth.ChangePassword) // 修改密码
 	}
 }

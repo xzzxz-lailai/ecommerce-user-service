@@ -39,6 +39,16 @@ func FindByUsername(ctx context.Context, username string) (*model.User, error) {
 	return &user, nil
 }
 
+// ExistsByEmail 按邮箱查询是否存在
+func ExistsByEmail(ctx context.Context, email string) (bool, error) {
+	var count int
+	err := global.DB.GetContext(ctx, &count, "SELECT COUNT(*) FROM users WHERE email = ?", email)
+	if err != nil {
+		return false, err
+	}
+	return count > 0, nil
+}
+
 // 根据 userID 查询用户
 func FindByID(ctx context.Context, usserID int64) (*model.User, error) {
 	var user model.User
@@ -57,9 +67,10 @@ func FindByID(ctx context.Context, usserID int64) (*model.User, error) {
 func Create(ctx context.Context, user *model.User) error {
 	_, err := global.DB.ExecContext(
 		ctx,
-		"INSERT INTO users (username, password) VALUES (?, ?)",
+		"INSERT INTO users (username, password, email) VALUES (?, ?, ?)",
 		user.Username,
 		user.Password,
+		user.Email,
 	)
 
 	return err

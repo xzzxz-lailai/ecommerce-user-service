@@ -24,27 +24,17 @@ type CORSConfig struct {
 	AllowOrigins []string `mapstructure:"allow_origins"`
 }
 
-type COSConfig struct {
-	SecretID  string `mapstructure:"secret_id"`
-	SecretKey string `mapstructure:"secret_key"`
-	Region    string `mapstructure:"region"`
-	BucketURL string `mapstructure:"bucket_url"`
+type EtcdConfig struct {
+	Host         string `mapstructure:"host"` // etcd 服务地址
+	ServerName   string `mapstructure:"server_name"`
+	ServeAddress string `mapstructure:"address"`
 }
-type EmailSmtpConfig struct {
-	Host     string `mapstructure:"host"`     // 邮箱服务器
-	Port     int    `mapstructure:"port"`     // 邮箱服务器端口
-	Username string `mapstructure:"username"` // 发送人邮箱
-	Password string `mapstructure:"pass"`     // SMTP 授权码
-	From     string `mapstructure:"from"`     // 发送人邮箱
-	FormName string `mapstructure:"from_name"`
-}
+
 type Config struct {
-	Server    ServerConfig
-	MySQL     MySQLConfig
-	JWT       JWTConfig
-	COS       COSConfig
-	EmailSmtp EmailSmtpConfig
-	CORS      CORSConfig
+	Server ServerConfig
+	MySQL  MySQLConfig
+	JWT    JWTConfig
+	Etcd   EtcdConfig
 }
 
 var Cfg Config
@@ -68,8 +58,9 @@ func InitConfig() *Config {
 		panic(err)
 	}
 
-	// 初始化数据库
-	NewMySQL()
+	if _, err := NewMySQL(); err != nil { // 初始化数据库
+		panic(err)
+	}
 
 	return &Cfg
 }
