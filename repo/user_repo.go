@@ -85,3 +85,15 @@ func UpdatePassword(ctx context.Context, userID int64, password string) error {
 
 	return err
 }
+
+// UpdatePasswordByEmail 根据邮箱修改密码
+func UpdatePasswordByEmail(ctx context.Context, email, password string) error {
+	_, err := global.DB.ExecContext(
+		ctx,
+		"UPDATE users SET password = ? WHERE email = ?",
+		password,
+		email,
+	)
+
+	return err
+}

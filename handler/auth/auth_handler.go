@@ -9,6 +9,69 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// SendRegisterEmailCode 发送注册邮箱验证码
+func SendRegisterEmailCode(c *gin.Context) {
+	var req model.SendRegisterEmailCodeRequest
+
+	// 接收前端 JSON
+	if err := c.ShouldBindJSON(&req); err != nil {
+		pkg.Error(c, http.StatusBadRequest, "参数错误")
+		return
+	}
+
+	// 调用 Service
+	err := auth.SendRegisterEmailCode(c.Request.Context(), &req)
+	if err != nil {
+		pkg.Error(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	// 返回结果
+	pkg.Success(c, "验证码发送成功", nil)
+}
+
+// SendForgetPasswordEmailCode 发送忘记密码邮箱验证码
+func SendForgetPasswordEmailCode(c *gin.Context) {
+	var req model.SendForgetPasswordEmailCodeRequest
+
+	// 接收前端 JSON
+	if err := c.ShouldBindJSON(&req); err != nil {
+		pkg.Error(c, http.StatusBadRequest, "参数错误")
+		return
+	}
+
+	// 调用 Service
+	err := auth.SendForgetPasswordEmailCode(c.Request.Context(), &req)
+	if err != nil {
+		pkg.Error(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	// 返回结果
+	pkg.Success(c, "验证码发送成功", nil)
+}
+
+// ForgetPassword 忘记密码，通过邮箱验证码重置密码
+func ForgetPassword(c *gin.Context) {
+	var req model.ForgetPasswordRequest
+
+	// 接收前端 JSON
+	if err := c.ShouldBindJSON(&req); err != nil {
+		pkg.Error(c, http.StatusBadRequest, "参数错误")
+		return
+	}
+
+	// 调用 Service
+	err := auth.ForgetPassword(c.Request.Context(), &req)
+	if err != nil {
+		pkg.Error(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	// 返回结果
+	pkg.Success(c, "密码重置成功", nil)
+}
+
 // Register 用户注册
 func Register(c *gin.Context) {
 	var req model.RegisterRequest
