@@ -16,10 +16,7 @@ type MySQLConfig struct {
 	Pass   string `mapstructure:"password"`
 	DBName string `mapstructure:"dbname"`
 }
-type JWTConfig struct {
-	Secret string `mapstructure:"secret"` // 密钥
-	Expire int    `mapstructure:"expire"` // 过期小时数  单位：小时
-}
+
 type CORSConfig struct {
 	AllowOrigins []string `mapstructure:"allow_origins"`
 }
@@ -30,11 +27,16 @@ type EtcdConfig struct {
 	ServeAddress string `mapstructure:"address"`
 }
 
+type JWTConfig struct {
+	Secret string `mapstructure:"secret"` // JWT 密钥
+	Expire int    `mapstructure:"expire"` // JWT 过期时间，单位小时
+}
+
 type Config struct {
 	Server ServerConfig
 	MySQL  MySQLConfig
-	JWT    JWTConfig
 	Etcd   EtcdConfig
+	JWT    JWTConfig
 }
 
 var Cfg Config

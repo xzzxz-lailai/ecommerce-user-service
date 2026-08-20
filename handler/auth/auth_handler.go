@@ -128,7 +128,11 @@ func ChangePassword(c *gin.Context) {
 		pkg.Error(c, http.StatusBadRequest, "参数错误")
 		return
 	}
-	userID := userIDValue.(int64)
+	userID, ok := userIDValue.(int64) //类型断言
+	if !ok {
+		// 类型不对，处理错误
+		return
+	}
 	//  调用 Service
 	err := auth.ChangePassword(c.Request.Context(), userID, &req)
 	if err != nil {
