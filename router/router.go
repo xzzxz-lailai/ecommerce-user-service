@@ -14,11 +14,11 @@ func Router() *gin.Engine {
 	// API v1 路由组
 	api := r.Group("/api/v1")
 	{
-		// 公开路由（无需鉴权）
-		AuthRoutes(api)
+		// 公开路由(无需鉴权)
+		AccountRoutes(api)
 
-		// 私有路由（需要鉴权）
-		private := api.Group("", middleware.Authorization())
+		// 公司内部账号路由(需要鉴权)
+		private := api.Group("", middleware.RequireUser())
 		{
 			UserRoutes(private)
 		}

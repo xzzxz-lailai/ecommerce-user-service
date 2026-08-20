@@ -1,10 +1,10 @@
-package auth
+package account
 
 import (
 	"net/http"
 	"user_service/model"
 	"user_service/pkg"
-	auth "user_service/service/auth"
+	"user_service/service/account"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,7 +20,7 @@ func SendRegisterEmailCode(c *gin.Context) {
 	}
 
 	// 调用 Service
-	err := auth.SendRegisterEmailCode(c.Request.Context(), &req)
+	err := account.SendRegisterEmailCode(c.Request.Context(), &req)
 	if err != nil {
 		pkg.Error(c, http.StatusBadRequest, err.Error())
 		return
@@ -41,7 +41,7 @@ func SendForgetPasswordEmailCode(c *gin.Context) {
 	}
 
 	// 调用 Service
-	err := auth.SendForgetPasswordEmailCode(c.Request.Context(), &req)
+	err := account.SendForgetPasswordEmailCode(c.Request.Context(), &req)
 	if err != nil {
 		pkg.Error(c, http.StatusBadRequest, err.Error())
 		return
@@ -62,7 +62,7 @@ func ForgetPassword(c *gin.Context) {
 	}
 
 	// 调用 Service
-	err := auth.ForgetPassword(c.Request.Context(), &req)
+	err := account.ForgetPassword(c.Request.Context(), &req)
 	if err != nil {
 		pkg.Error(c, http.StatusBadRequest, err.Error())
 		return
@@ -83,7 +83,7 @@ func Register(c *gin.Context) {
 	}
 
 	// 调用 Service
-	err := auth.Register(c.Request.Context(), &req)
+	err := account.Register(c.Request.Context(), &req)
 	if err != nil {
 		pkg.Error(c, http.StatusBadRequest, err.Error())
 		return
@@ -104,7 +104,7 @@ func Login(c *gin.Context) {
 	}
 
 	// 调用 Service
-	resp, err := auth.Login(c.Request.Context(), &req)
+	resp, err := account.Login(c.Request.Context(), &req)
 	if err != nil {
 		pkg.Error(c, http.StatusBadRequest, err.Error())
 		return
@@ -134,7 +134,7 @@ func ChangePassword(c *gin.Context) {
 		return
 	}
 	//  调用 Service
-	err := auth.ChangePassword(c.Request.Context(), userID, &req)
+	err := account.ChangePassword(c.Request.Context(), userID, &req)
 	if err != nil {
 		pkg.Error(c, http.StatusBadRequest, err.Error())
 		return

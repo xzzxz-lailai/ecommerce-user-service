@@ -2,13 +2,13 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"user_service/handler/auth"
+	"user_service/handler/account"
 )
 
 // UserRoutes 用户路由
 func UserRoutes(r *gin.RouterGroup) {
 	userGroup := r.Group("/user")
 	{
-		userGroup.PUT("/password", auth.ChangePassword) // 修改密码
+		userGroup.PUT("/password", account.ChangePassword) // 修改密码
 	}
 }
